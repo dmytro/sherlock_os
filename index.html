@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII" />
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.8.5.2
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><div id='filecontents'><p><img src="it_s_unix_my_dear_watson.png" alt=""></p>
+
+<h1>Name: Sherlock OS</h1>
+
+<p>This is a simple shell script to detect UNIX/Linux OS and varios aspects of the OS. Especially for Linux: distribution type and derivarite (such as CentOS/RHEL or Debian/Ubuntu)</p>
+
+<p>Used these sources to start:</p>
+
+<ul>
+<li><a href="http://www.novell.com/coolsolutions/feature/11251.html">http://www.novell.com/coolsolutions/feature/11251.html</a></li>
+<li><a href="http://serverfault.com/questions/3331/how-do-i-find-out-what-version-of-linux-is-running">http://serverfault.com/questions/3331/how-do-i-find-out-what-version-of-linux-is-running</a></li>
+<li><a href="http://www.unix.com/slackware/23652-determine-linux-version.html">http://www.unix.com/slackware/23652-determine-linux-version.html</a></li>
+</ul>
+
+<p>Script outputs results in the format that can either be parsed or directly eval&#39;ed in Bourne shell:</p>
+
+<h2>Example</h2>
+
+<pre class="code ruby"><code class="ruby">      $ sherlock
+      OS=Linux
+      MACH=x86_64
+      KERNEL=2.6.32-5-amd64
+      DISTRIBUTION=debian
+      FAMILY=debian
+      DERIVATIVE=Debian
+      RELEASE=6.0.6
+      CODENAME=squeeze
+</code></pre>
+
+<h2>Installation</h2>
+
+<p>Sherlock OS is just single file shell script. It can be installed and used from any location, but to make distribution for Ruby programmer (i.e. for me) easier it is packaged as gem.</p>
+
+<p>Install it yourself as:</p>
+
+<pre class="code ruby"><code class="ruby">$ gem install sherlock_os
+</code></pre>
+
+<p>If you don&#39;t need gem, then simply grab the file from  <a href="https://github.com/dmytro/sherlock_os/blob/master/bin/sherlock">https://github.com/dmytro/sherlock_os/blob/master/bin/sherlock</a> and put in anywhere you want to use it.    </p>
+
+<h2>Usage</h2>
+
+<p>Simply run <code>sherlock</code> and examine output or use it in shell scripts as eval:</p>
+
+<pre class="code ruby"><code class="ruby">    <span class='id identifier rubyid_eval'>eval</span> <span class='backtick'>`</span><span class='tstring_content'>sherlock</span><span class='tstring_end'>`</span></span>
+</code></pre>
+
+<h3>Output</h3>
+
+<p>Various OS supported to various degrees, YMMV.</p>
+
+<p>These are just examples of output on some OS&#39;s I have access to at the time of writing:</p>
+
+<h4>MacOSX (Darwin)</h4>
+
+<pre class="code ruby"><code class="ruby">OS=Darwin
+MACH=x86_64
+REV=11.4.2
+</code></pre>
+
+<h4>CentOS</h4>
+
+<pre class="code ruby"><code class="ruby">OS=Linux
+MACH=x86_64
+KERNEL=2.6.18-308.11.1.el5xen
+DISTRIBUTION=redhat
+FAMILY=rh
+DERIVATIVE=centos
+RELEASE=5.8
+</code></pre>
+
+<h4>Debian</h4>
+
+<pre class="code ruby"><code class="ruby">OS=Linux
+MACH=x86_64
+KERNEL=2.6.32-5-amd64
+DISTRIBUTION=debian
+FAMILY=debian
+DERIVATIVE=Debian
+RELEASE=6.0.6
+CODENAME=squeeze
+</code></pre>
+
+<h4>Ubuntu</h4>
+
+<pre class="code ruby"><code class="ruby">OS=Linux
+MACH=i686
+KERNEL=3.2.0-23-generic-pae
+DISTRIBUTION=debian
+FAMILY=debian
+DERIVATIVE=Ubuntu
+RELEASE=12.04
+CODENAME=precise
+</code></pre>
+
+<h2>Contributing</h2>
+
+<ol>
+<li>Fork it</li>
+<li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
+<li>Commit your changes (<code>git commit -am &#39;Add some feature&#39;</code>)</li>
+<li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
+<li>Create new Pull Request</li>
+</ol>
+
+<h1>Author</h1>
+
+<p>Dmytro Kovalov, 2013, March 12-13</p>
+</div></div>
+
+    <div id="footer">
+  Generated on Wed Mar 13 16:17:12 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.5.2 (ruby-1.9.3).
+</div>
+
+  </body>
+</html>
