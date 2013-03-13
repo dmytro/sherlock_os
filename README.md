@@ -2,7 +2,7 @@
 ![](it_s_unix_my_dear_watson.png)
 # Name: Sherlock OS
 
-This is a simple shell script to detect UNIX/Linux OS and varios aspects of the OS. Especially for Linux: distribution type and derivarite (such as CentOS/RHEL or Debian/Ubuntu)
+This is a simple shell script to detect UNIX/Linux OS and various aspects of the OS. Especially for Linux: distribution type and derivative (such as CentOS/RHEL or Debian/Ubuntu)
 
 
 Used these sources to start:
