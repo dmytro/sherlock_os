@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["dmytro.kovalov@gmail.com"]
   gem.description   = %q{Shell script to detect UNIX/Linux OS name, version and aspects of the OS}
   gem.summary       = %q{Shell script to detect UNIX/Linux OS name, version and varios aspects of the OS. Especially for Linux: distribution type and derivarite (such as CentOS/RHEL or Debian/Ubuntu)}
-  gem.homepage      = ""
+  gem.homepage      = "http://dmytro.github.com"
   
   gem.files         = `git ls-files`.split($/)
   
