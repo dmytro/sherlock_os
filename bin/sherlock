@@ -1,35 +1,48 @@
 #!/bin/sh
-
-PATH=/bin:/sbin:/usr/bin:/usr/sbin
-
-# Sources:
+#
+# Script to detect UNIX/Linux OS and varios aspects of the
+# OS. Especially for Linux: distribution type and derivarite (such as
+# CentOS/RHEL or Debian/Ubuntu)
+#
+# Author: Dmytro Kovalov, 2013, March 12-13
+#
+# Used these sources to start:
 # http://www.novell.com/coolsolutions/feature/11251.html
 # http://serverfault.com/questions/3331/how-do-i-find-out-what-version-of-linux-is-running
 # http://www.unix.com/slackware/23652-determine-linux-version.html
+#
+# Script outputs results in the format that can either be parsed or
+# directly eval'ed in Bourne shell:
+#
+# Example
+# -----------
+# sherlock
+# OS=Linux
+# MACH=x86_64
+# KERNEL=2.6.32-5-amd64
+# DISTRIBUTION=debian
+# FAMILY=debian
+# DERIVATIVE=Debian
+# RELEASE=6.0.6
+# CODENAME=squeeze
+#
 
-# Detects which OS and if it is Linux then it will detect which Linux Distribution.
+PATH=/bin:/sbin:/usr/bin:/usr/sbin
 
-REV=`uname -r`
-MACH=`uname -m`
-
-
-##
+####################################################################
 # Functions
 #
 
-
-
 ##
-# Ditto
+# Main function that call all others
 #
-GetVersionFromFile() {
-	VERSION=`cat $1 | tr "\n" ' ' | sed s/.*VERSION.*=\ // `
-}
-
 detect_os () {
 
     OS=`uname -s`
+    MACH=`uname -m`
+
     echo OS=$OS
+    echo MACH=$MACH
 
     if [ "${OS}" = "SunOS" ] ; then
 	    echo ARCH=`uname -p`	
@@ -43,6 +56,8 @@ detect_os () {
         linux_distro
     fi
 }
+
+
 
 ## ------------------------------------------------------------
 # Redhat derivatives distros
@@ -64,7 +79,6 @@ redhat_derivative () {
 redhat_release () {
     echo RELEASE=`tr -d 'a-zA-Z [](){}' < /etc/redhat-release`
 }
-# ------------------------------------------------------------
 
 ## ------------------------------------------------------------
 # Debian derivatives
@@ -91,13 +105,17 @@ linux_distro () {
         echo FAMILY=rh
         redhat_derivative
         redhat_release
+    elif [ -s /etc/slackware-version ]; then
+        echo DISTRIBUTION="slackware"
 	elif [ -f /etc/SUSE-release ] ; then
         # TODO - not tested
- 		echo DISTRIBUTION=`cat /etc/SUSE-release | tr "\n" ' '| sed s/VERSION.*//`
+        echo DISTRIBUTION=suse
+ 		echo PSUEDONAME=`cat /etc/SUSE-release | tr "\n" ' '| sed s/VERSION.*//`
  		echo REV=`cat /etc/SUSE-release | tr "\n" ' ' | sed s/.*=\ //`
         echo VERSION=`cat /etc/SuSE-release | grep 'VERSION' | sed  -e 's#[^0-9]##g'`
 	elif [ -f /etc/mandrake-release ] ; then
-        # TODO
+        # TODO - not tested
+        echo DISTRIBUTION=mandrake
  		echo PSUEDONAME=`cat /etc/mandrake-release | sed s/.*\(// | sed s/\)//`
  		echo REV=`cat /etc/mandrake-release | sed s/.*release\ // | sed s/\ .*//`
         echo FAMILY=rh
@@ -108,118 +126,16 @@ linux_distro () {
     elif [ -f /etc/UnitedLinux-release ]; then
         echo DISTRIBUTION="united"
         echo VERSION=`cat /etc/UnitedLinux-release`
-
+    elif [ -r /etc/init.d/functions.sh ]; then
+        # TODO - not tested
+        source /etc/init.d/functions.sh
+        [ zz`type -t ebegin 2>/dev/null` == "zzfunction" ] && echo DISTRIBUTION="gentoo"
 	fi
 }
+
 # --------------------------------------------------------------------------------
-##
 # Do it!
 #
-
 detect_os
 
-exit
 
-
-get_distribution_type()
-{
-    local dtype
-    # Assume unknown
-    dtype="unknown"
-
-    # First test against Fedora / RHEL / CentOS / generic Redhat derivative
-    if [ -r /etc/rc.d/init.d/functions ]; then
-        source /etc/rc.d/init.d/functions
-        [ zz`type -t passed 2>/dev/null` == "zzfunction" ] && dtype="redhat"
-
-    # Then test against SUSE (must be after Redhat,
-    # I've seen rc.status on Ubuntu I think? TODO: Recheck that)
-    elif [ -r /etc/rc.status ]; then
-        source /etc/rc.status
-        [ zz`type -t rc_reset 2>/dev/null` == "zzfunction" ] && dtype="suse"
-
-    # Then test against Debian, Ubuntu and friends
-    elif [ -r /lib/lsb/init-functions ]; then
-        source /lib/lsb/init-functions
-        [ zz`type -t log_begin_msg 2>/dev/null` == "zzfunction" ] && dtype="debian"
-
-    # Then test against Gentoo
-    elif [ -r /etc/init.d/functions.sh ]; then
-        source /etc/init.d/functions.sh
-        [ zz`type -t ebegin 2>/dev/null` == "zzfunction" ] && dtype="gentoo"
-
-    # For Slackware we currently just test if /etc/slackware-version exists
-    # and isn't empty (TODO: Find a better way :)
-    elif [ -s /etc/slackware-version ]; then
-        dtype="slackware"
-    fi
-    echo $dtype
-}
-
-
-# http://www.unix.com/slackware/23652-determine-linux-version.html
- # Determine the Linux distribution and version that is being run.
-   #
-   # Check for GNU/Linux distributions
-   if [ -f /etc/SuSE-release ]; then
-     DISTRIBUTION="suse"
-   elif [ -f /etc/UnitedLinux-release ]; then
-     DISTRIBUTION="united"
-  elif [ -f /etc/debian_version ]; then
-    DISTRIBUTION="debian"
-  elif [ -f /etc/redhat-release ]; then
-    a=`grep -i 'red.*hat.*enterprise.*linux' /etc/redhat-release`
-    if test $? = 0; then
-      DISTRIBUTION=rhel
-    else
-      a=`grep -i 'red.*hat.*linux' /etc/redhat-release`
-      if test $? = 0; then
-        DISTRIBUTION=rh
-      else
-        a=`grep -i 'cern.*e.*linux' /etc/redhat-release`
-        if test $? = 0; then
-          DISTRIBUTION=cel
-        else
-          a=`grep -i 'scientific linux cern' /etc/redhat-release`
-          if test $? = 0; then
-            DISTRIBUTION=slc
-          else
-            DISTRIBUTION="unknown"
-          fi
-        fi
-      fi
-    fi
-  else
-    DISTRIBUTION="unknown"
-  fi
-
-  ###    VERSION=`rpm -q redhat-release | sed -e 's#redhat[-]release[-]##'`
-
-  case ${DISTRIBUTION} in
-  rh|cel|rhel)
-      VERSION=`cat /etc/redhat-release | sed -e 's#[^0-9]##g' -e 's#7[0-2]#73#'`
-      ;;
-  slc)
-      VERSION=`cat /etc/redhat-release | sed -e 's#[^0-9]##g' | cut -c1`
-      ;;
-  debian)
-      VERSION=`cat /etc/debian_version`
-      if [ ${VERSION} = "testing/unstable" ]; then
-          # The debian testing/unstable version must be translated into
-          # a numeric version number, but no number makes sense so just
-          # remove the version all together.
-          VERSION=""
-      fi
-      ;;
-#   suse)
-#       VERSION=`cat /etc/SuSE-release | grep 'VERSION' | sed  -e 's#[^0-9]##g'`
-#       ;;
-#   united)
-#       VERSION=`cat /etc/UnitedLinux-release`
-#       ;;
-  *)
-      VERSION='00'
-      ;;
-  esac;
-
-  echo ${DISTRIBUTION}${VERSION}

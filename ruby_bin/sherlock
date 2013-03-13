@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+path = Gem.bin_path('sherlock_os', 'sherlock')
+
+path = File.dirname(File.dirname(path))
+
+print %x{ #{path}/bin/sherlock 2>&1 }
