@@ -47,10 +47,13 @@ detect_os () {
     if [ "${OS}" = "SunOS" ] ; then
 	    echo ARCH=`uname -p`	
 	    OSSTR="${OS} ${REV}(${ARCH} `uname -v`)"
+        echo FAMILY=solaris
     elif [ "${OS}" = "AIX" ] ; then
 	    echo OSSTR="${OS} `oslevel` (`oslevel -r`)"
+        echo FAMILY=aix
     elif [ "${OS}" = "Darwin" ] ; then
         echo REV=`uname -r`
+        echo FAMILY=macosx
     elif [ "${OS}" = "Linux" ] ; then
 	    echo KERNEL="`uname -r`"
         linux_distro
