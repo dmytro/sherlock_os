@@ -90,7 +90,9 @@ debian_derivative () {
         echo CODENAME=`lsb_release --codename --short 2> /dev/null`
         return
     else
+        echo DERIVATIVE=unknown
         echo RELEASE=`cat /etc/debian_version`
+        echo CODENAME=unknown
         return
     fi
 }
