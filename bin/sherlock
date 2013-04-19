@@ -93,7 +93,6 @@ debian_derivative () {
         echo DERIVATIVE=unknown
         echo RELEASE=`cat /etc/debian_version`
         echo CODENAME=unknown
-        echo "Please consider installing lsb-release to get the DERIVATIVE and CODENAME."
         return
     fi
 }
